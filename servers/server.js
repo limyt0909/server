@@ -72,7 +72,7 @@ db.run(query, (err) => {
 //JSON형태로 books에 쏘기 Board1 게시판에서 사용
 
 app.get("/books", (req, res) => {
-  const sql = "SELECT * FROM Books ";
+  const sql = "SELECT * FROM Books";
   var body = req.body;
 
   db.all(sql, [], (err, rows) => {

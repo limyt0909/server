@@ -7,7 +7,6 @@ const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
 const cors = require("cors");
-
 const bodyParser = require("body-parser");
 
 const port = process.env.PORT || 80;
@@ -59,6 +58,14 @@ const sql_create4 = `CREATE TABLE IF NOT EXISTS Books4 (
   Comments TEXT
 );`;
 
+const sql_create5 = `CREATE TABLE IF NOT EXISTS file (
+  idx INTEGER PRIMARY KEY AUTOINCREMENT,
+  Title VARCHAR(100) NOT NULL,
+  Author VARCHAR(100) NOT NULL, 
+  DateTime real,
+  Comments TEXT
+);`;
+
 //실행시 테이블생성
 db.run(sql_create, (err) => {
   if (err) {
@@ -85,6 +92,13 @@ db.run(sql_create4, (err) => {
     return console.error(err.message);
   }
   console.log("Successful creation of the 'Books4' table");
+});
+
+db.run(sql_create5, (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log("Successful creation of the 'file' table");
 });
 
 //JSON형태로 books에 쏘기 Board1 게시판에서 사용
@@ -308,7 +322,6 @@ app.post("/create", (req, res) => {
   const data = req.body;
   const Title = data.Title;
   const Author = data.Author;
-
   const Comments = data.Comments;
 
   const query = `INSERT INTO Books (Title, Author, Comments, DateTime)
@@ -330,7 +343,6 @@ app.post("/create2", (req, res) => {
   const data = req.body;
   const Title = data.Title;
   const Author = data.Author;
-
   const Comments = data.Comments;
 
   const query = `INSERT INTO Books2 (Title, Author, Comments, DateTime)
@@ -352,7 +364,6 @@ app.post("/create3", (req, res) => {
   const data = req.body;
   const Title = data.Title;
   const Author = data.Author;
-
   const Comments = data.Comments;
 
   const query = `INSERT INTO Books3 (Title, Author, Comments, DateTime)
@@ -374,7 +385,6 @@ app.post("/create4", (req, res) => {
   const data = req.body;
   const Title = data.Title;
   const Author = data.Author;
-
   const Comments = data.Comments;
 
   const query = `INSERT INTO Books4 (Title, Author, Comments, DateTime)
@@ -442,5 +452,22 @@ app.post("/delete4", (req, res) => {
       console.error(err.message);
     }
     res.redirect("/books4");
+  });
+});
+
+//multer를 이용한 파일업로드
+
+app.post("/file", (req, res) => {
+  const data = req.body;
+
+  const sql = `INSERT INTO Books (Title, Author, Comments, DateTime)
+  VALUES ('${Title}', '${Author}', '${Comments}', date('now'));`;
+
+  db.all(sql, (err, rows) => {
+    if (err) {
+      res.send(err);
+      return console.error(err.message);
+    }
+    res.send();
   });
 });

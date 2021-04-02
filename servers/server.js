@@ -60,7 +60,7 @@ const sql_create5 = `CREATE TABLE IF NOT EXISTS Books5 (
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
   Comments TEXT,
-  File BLOB
+  File BLOB NOT NULL
 );`;
 
 //실행시 테이블생성
@@ -237,7 +237,8 @@ app.get("/more4", (req, res) => {
 
 app.get("/more5", (req, res) => {
   const sql =
-    "SELECT title, author, comments FROM Books5 where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books5 where idx = " +
+    req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -525,6 +526,7 @@ app.post("/delete4", (req, res) => {
     res.redirect("/books4");
   });
 });
+
 app.post("/delete5", (req, res) => {
   const data = req.body;
   const idx = data.idx;
@@ -542,17 +544,10 @@ app.post("/delete5", (req, res) => {
 
 //파일업로드 API
 const router = express.Router();
-var multer = require("multer");
-
+const multer = require("multer");
 app.use(express.static("public"));
-var upload = multer({ dest: "./public/img/" });
 
-var storage = multer.diskStorage({
-  // destination: "./public/img/",
-  filename: function (req, file, cb) {
-    cb(null, "imgfile" + Date.now() + path.extname(file.originalname));
-  },
-});
+const upload = multer({ dest: __dirname + "/../public/uploads/" });
 
 app.post("/upload", upload.single("img"), function (req, res, next) {
   res.send({
@@ -560,76 +555,3 @@ app.post("/upload", upload.single("img"), function (req, res, next) {
   });
   console.log(req.file);
 });
-
-/*
-//diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다.
-let storage = multer.diskStorage({
-  //multer disk storage settings
-  destination: function (req, file, callback) {
-    callback(null, "uploads/");
-  },
-  filename: function (req, file, callback) {
-    let extension = path.extname(file.originalname);
-    let basename = path.basename(file.originalname, extension);
-    callback(null, basename + "-" + Date.now() + extension);
-  },
-});
-
-//특정 파일형식만 저장하기 위해서는 fileFilter함수를 사용한다.
-const upload = multer({
-  //multer settings
-  storage: storage,
-  fileFilter: function (req, file, callback) {
-    var ext = path.extname(file.originalname);
-    if (
-      ext !== ".xlsx" &&
-      ext !== ".pdf" &&
-      ext !== ".png" &&
-      ext !== ".jpg" &&
-      ext !== ".gif" &&
-      ext !== ".jpeg"
-    ) {
-      return callback(
-        new Error("Only .xlsx .pdf .png, .jpg .gif and .jpeg format allowed!")
-      );
-    }
-    callback(null, true);
-  },
-}).any(); //.any()는 전달받는 모든 파일을 받는다. 파일배열은 req.files에 저장되어 있다.
-
-router.post("/files", (req, res, next) => {
-  const reqFiles = [];
-  try {
-    upload(req, res, function (err) {
-      if (err) {
-        return res.status(400).send({
-          //에러발생하면, 에러 메시지와 빈 파일명 array를 return한다.
-          message: err.message,
-          files: reqFiles,
-        });
-      }
-
-      for (var i = 0; i < req.files.length; i++) {
-        //저장된 파일명을 차례로 push한다.
-        reqFiles.push(req.files[i].filename);
-      }
-
-      res.status(200).send({
-        //저장 성공 시, 저장성공 메시지와 저장된 파일명 array를 return한다.
-        message: "Uploaded the file successfully",
-        files: reqFiles,
-      });
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({
-      message: `Could not upload the file: ${err}`,
-      files: reqFiles,
-    });
-  }
-});
-
-module.exports = router;
-
-
-*/

@@ -1,0 +1,7 @@
+ㅇㅇ
+ㅇㅇ
+@media (max-width: 600px) {
+  .title {
+    font-size: 20px;
+  }
+}

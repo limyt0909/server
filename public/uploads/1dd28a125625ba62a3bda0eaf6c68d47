@@ -1,0 +1,19 @@
+@media screen and (max-width: 575px) {
+  .card {
+    width: 75%;
+    padding: 20%;
+  }
+
+  .card .card-body {
+    padding: 10px 20px;
+  }
+
+  .card .card-footer .col {
+    padding: 0 10px;
+  }
+
+  .card .card-footer .count {
+    display: block;
+    margin-bottom: 5px;
+  }
+}

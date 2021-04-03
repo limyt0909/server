@@ -543,8 +543,6 @@ const upload = multer({
 });
 
 
-
-
 app.post("/create5", (req, res) => {
   const data = req.body;
 
@@ -569,9 +567,6 @@ app.post("/create5", (req, res) => {
 });
 
 
-
-
-
 app.post("/upload", upload.single("files"), function (req, res, next) {
   res.send({
     fileName: req.file.filename,
@@ -579,7 +574,6 @@ app.post("/upload", upload.single("files"), function (req, res, next) {
 
   console.log(req.file);
 });
-
 
 
 app.get("/download",function(req,res){

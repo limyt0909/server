@@ -6,7 +6,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const port = process.env.PORT || 80;
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/api", (req, res) => res.json({ username: "yong taek" }));
@@ -452,28 +451,6 @@ app.post("/create4", (req, res) => {
   });
 });
 
-app.post("/create5", (req, res) => {
-  const data = req.body;
-
-  const Title = data.Title;
-  const Author = data.Author;
-  const Comments = data.Comments;
-  const File = data.File;
-
-  const query = `INSERT INTO Books5 (Title, Author, Comments, DateTime, File)
-
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
-
-  db.all(query, (err, rows) => {
-    if (err) {
-      res.send(err);
-
-      return console.error(err.message);
-    }
-
-    res.send();
-  });
-});
 //해당 칼럼 삭제 API
 app.post("/delete", (req, res) => {
   const data = req.body;
@@ -547,11 +524,66 @@ const router = express.Router();
 const multer = require("multer");
 app.use(express.static("public"));
 
-const upload = multer({ dest: __dirname + "/../public/uploads/" });
 
-app.post("/upload", upload.single("img"), function (req, res, next) {
+
+
+/*
+const upload = multer({ dest: __dirname + "/uploads/" });
+*/
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, `${__dirname}/uploads`);
+    },
+    filename: function (req, file, cb) {
+      cb(null,  (file.originalname));
+    }
+  }),
+});
+
+
+
+
+app.post("/create5", (req, res) => {
+  const data = req.body;
+
+  const Title = data.Title;
+  const Author = data.Author;
+  const Comments = data.Comments;
+  const File = data.File;
+
+  const query = `INSERT INTO Books5 (Title, Author, Comments, DateTime, File)
+
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
+
+  db.all(query, (err, rows) => {
+    if (err) {
+      res.send(err);
+
+      return console.error(err.message);
+    }
+
+    res.send();
+  });
+});
+
+
+
+
+
+app.post("/upload", upload.single("files"), function (req, res, next) {
   res.send({
     fileName: req.file.filename,
   });
+
   console.log(req.file);
 });
+
+
+
+app.get("/download",function(req,res){
+  let filename = req.query.filename
+  const file = `${__dirname}/uploads/${filename}`
+  res.download(file);
+})

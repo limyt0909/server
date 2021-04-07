@@ -186,7 +186,8 @@ app.get("/books5", (req, res) => {
 
 app.get("/more", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books where idx = " +
+    req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -201,7 +202,8 @@ app.get("/more", (req, res) => {
 
 app.get("/more2", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books2 where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books2 where idx = " +
+    req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -215,7 +217,8 @@ app.get("/more2", (req, res) => {
 });
 app.get("/more3", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books3 where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books3 where idx = " +
+    req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -229,7 +232,8 @@ app.get("/more3", (req, res) => {
 });
 app.get("/more4", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books4 where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books4 where idx = " +
+    req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -261,7 +265,6 @@ app.get("/more5", (req, res) => {
 //Edit 업데이트 포스트
 app.post("/edit", (req, res) => {
   const data = req.body;
-
   const idx = data.idx;
   const Title = data.Title;
   const Author = data.Author;
@@ -269,83 +272,65 @@ app.post("/edit", (req, res) => {
   const File = data.File;
   const query = `UPDATE books SET Title='${Title}', Author='${Author}',
      Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
-
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });
 
 app.post("/edit2", (req, res) => {
   const data = req.body;
-
   const idx = data.idx;
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
-
   const File = data.File;
   const query = `UPDATE books2 SET Title='${Title}', Author='${Author}',
      Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
-
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });
 
 app.post("/edit3", (req, res) => {
   const data = req.body;
-
   const idx = data.idx;
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
-
   const File = data.File;
   const query = `UPDATE books3 SET Title='${Title}', Author='${Author}',
      Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
-
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });
 
 app.post("/edit4", (req, res) => {
   const data = req.body;
-
   const idx = data.idx;
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
-
   const File = data.File;
   const query = `UPDATE books4 SET Title='${Title}', Author='${Author}',
      Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
-
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });

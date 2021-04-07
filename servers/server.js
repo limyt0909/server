@@ -29,28 +29,36 @@ const sql_create = `CREATE TABLE IF NOT EXISTS Books (
   Title VARCHAR(100) NOT NULL,
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
-  Comments TEXT
+  Comments TEXT,
+  File BLOB NOT NULL
+
 );`;
 const sql_create2 = `CREATE TABLE IF NOT EXISTS Books2 (
   idx INTEGER PRIMARY KEY AUTOINCREMENT,
   Title VARCHAR(100) NOT NULL,
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
-  Comments TEXT
+  Comments TEXT,
+  File BLOB NOT NULL
+
 );`;
 const sql_create3 = `CREATE TABLE IF NOT EXISTS Books3 (
   idx INTEGER PRIMARY KEY AUTOINCREMENT,
   Title VARCHAR(100) NOT NULL,
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
-  Comments TEXT
+  Comments TEXT,
+  File BLOB NOT NULL
+
 );`;
 const sql_create4 = `CREATE TABLE IF NOT EXISTS Books4 (
   idx INTEGER PRIMARY KEY AUTOINCREMENT,
   Title VARCHAR(100) NOT NULL,
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
-  Comments TEXT
+  Comments TEXT, 
+   File BLOB NOT NULL
+
 );`;
 
 const sql_create5 = `CREATE TABLE IF NOT EXISTS Books5 (
@@ -178,7 +186,7 @@ app.get("/books5", (req, res) => {
 
 app.get("/more", (req, res) => {
   const sql =
-    "SELECT title, author, comments FROM Books where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books where idx = " + req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -193,7 +201,7 @@ app.get("/more", (req, res) => {
 
 app.get("/more2", (req, res) => {
   const sql =
-    "SELECT title, author, comments FROM Books2 where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books2 where idx = " + req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -207,7 +215,7 @@ app.get("/more2", (req, res) => {
 });
 app.get("/more3", (req, res) => {
   const sql =
-    "SELECT title, author, comments FROM Books3 where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books3 where idx = " + req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -221,7 +229,7 @@ app.get("/more3", (req, res) => {
 });
 app.get("/more4", (req, res) => {
   const sql =
-    "SELECT title, author, comments FROM Books4 where idx = " + req.query.idx;
+    "SELECT title, author, comments, File FROM Books4 where idx = " + req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -255,13 +263,12 @@ app.post("/edit", (req, res) => {
   const data = req.body;
 
   const idx = data.idx;
-  const title = data.Title;
-  const author = data.Author;
-  const comments = data.Comments;
-
-  const query = `UPDATE books SET Title='${title}', Author='${author}',
-
-     Comments='${comments}' WHERE idx=${idx};`;
+  const Title = data.Title;
+  const Author = data.Author;
+  const Comments = data.Comments;
+  const File = data.File;
+  const query = `UPDATE books SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
 
   db.all(query, (err, rows) => {
     if (err) {
@@ -278,13 +285,13 @@ app.post("/edit2", (req, res) => {
   const data = req.body;
 
   const idx = data.idx;
-  const title = data.Title;
-  const author = data.Author;
-  const comments = data.Comments;
+  const Title = data.Title;
+  const Author = data.Author;
+  const Comments = data.Comments;
 
-  const query = `UPDATE books2 SET Title='${title}', Author='${author}',
-
-     Comments='${comments}' WHERE idx=${idx};`;
+  const File = data.File;
+  const query = `UPDATE books2 SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
 
   db.all(query, (err, rows) => {
     if (err) {
@@ -301,13 +308,13 @@ app.post("/edit3", (req, res) => {
   const data = req.body;
 
   const idx = data.idx;
-  const title = data.Title;
-  const author = data.Author;
-  const comments = data.Comments;
+  const Title = data.Title;
+  const Author = data.Author;
+  const Comments = data.Comments;
 
-  const query = `UPDATE books3 SET Title='${title}', Author='${author}',
-
-     Comments='${comments}' WHERE idx=${idx};`;
+  const File = data.File;
+  const query = `UPDATE books3 SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
 
   db.all(query, (err, rows) => {
     if (err) {
@@ -324,13 +331,13 @@ app.post("/edit4", (req, res) => {
   const data = req.body;
 
   const idx = data.idx;
-  const title = data.Title;
-  const author = data.Author;
-  const comments = data.Comments;
+  const Title = data.Title;
+  const Author = data.Author;
+  const Comments = data.Comments;
 
-  const query = `UPDATE books4 SET Title='${title}', Author='${author}',
-
-     Comments='${comments}' WHERE idx=${idx};`;
+  const File = data.File;
+  const query = `UPDATE books4 SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
 
   db.all(query, (err, rows) => {
     if (err) {
@@ -351,10 +358,9 @@ app.post("/create", (req, res) => {
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
-
-  const query = `INSERT INTO Books (Title, Author, Comments, DateTime)
-
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'));`;
+  const File = data.File;
+  const query = `INSERT INTO Books (Title, Author, Comments, DateTime, File)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
 
   db.all(query, (err, rows) => {
     if (err) {
@@ -373,9 +379,9 @@ app.post("/create2", (req, res) => {
   const Author = data.Author;
   const Comments = data.Comments;
 
-  const query = `INSERT INTO Books2 (Title, Author, Comments, DateTime)
-
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'));`;
+  const File = data.File;
+  const query = `INSERT INTO Books2 (Title, Author, Comments, DateTime, File)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
 
   db.all(query, (err, rows) => {
     if (err) {
@@ -393,10 +399,9 @@ app.post("/create3", (req, res) => {
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
-
-  const query = `INSERT INTO Books3 (Title, Author, Comments, DateTime)
-
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'));`;
+  const File = data.File;
+  const query = `INSERT INTO Books3 (Title, Author, Comments, DateTime, File)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
 
   db.all(query, (err, rows) => {
     if (err) {
@@ -415,9 +420,9 @@ app.post("/create4", (req, res) => {
   const Author = data.Author;
   const Comments = data.Comments;
 
-  const query = `INSERT INTO Books4 (Title, Author, Comments, DateTime)
-
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'));`;
+  const File = data.File;
+  const query = `INSERT INTO Books4 (Title, Author, Comments, DateTime, File)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
 
   db.all(query, (err, rows) => {
     if (err) {

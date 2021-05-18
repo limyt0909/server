@@ -5,7 +5,7 @@ const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3002;
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/api", (req, res) => res.json({ username: "yong taek" }));
@@ -30,8 +30,8 @@ const sql_create = `CREATE TABLE IF NOT EXISTS Books (
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
   Comments TEXT,
-  File BLOB NOT NULL
-
+  File BLOB ,
+  Hash BLOB 
 );`;
 const sql_create2 = `CREATE TABLE IF NOT EXISTS Books2 (
   idx INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,8 +39,8 @@ const sql_create2 = `CREATE TABLE IF NOT EXISTS Books2 (
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
   Comments TEXT,
-  File BLOB NOT NULL
-
+  File BLOB ,
+  Hash BLOB 
 );`;
 const sql_create3 = `CREATE TABLE IF NOT EXISTS Books3 (
   idx INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,8 +48,8 @@ const sql_create3 = `CREATE TABLE IF NOT EXISTS Books3 (
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
   Comments TEXT,
-  File BLOB NOT NULL
-
+  File BLOB ,
+  Hash BLOB 
 );`;
 const sql_create4 = `CREATE TABLE IF NOT EXISTS Books4 (
   idx INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,17 +57,18 @@ const sql_create4 = `CREATE TABLE IF NOT EXISTS Books4 (
   Author VARCHAR(100) NOT NULL, 
   DateTime real,
   Comments TEXT, 
-   File BLOB NOT NULL
-
+  File BLOB ,
+  Hash BLOB 
 );`;
 
 const sql_create5 = `CREATE TABLE IF NOT EXISTS Books5 (
   idx INTEGER PRIMARY KEY AUTOINCREMENT,
-  Title VARCHAR(100) NOT NULL,
-  Author VARCHAR(100) NOT NULL, 
+  Title VARCHAR(100) ,
+  Author VARCHAR(100) , 
   DateTime real,
   Comments TEXT,
-  File BLOB NOT NULL
+  File BLOB ,
+  Hash BLOB 
 );`;
 
 //실행시 테이블생성
@@ -186,7 +187,7 @@ app.get("/books5", (req, res) => {
 
 app.get("/more", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books where idx = " +
+    "SELECT title, author, comments, File, Hash FROM Books where idx = " +
     req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -202,7 +203,7 @@ app.get("/more", (req, res) => {
 
 app.get("/more2", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books2 where idx = " +
+    "SELECT title, author, comments, File, Hash FROM Books2 where idx = " +
     req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -217,7 +218,7 @@ app.get("/more2", (req, res) => {
 });
 app.get("/more3", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books3 where idx = " +
+    "SELECT title, author, comments, File, Hash FROM Books3 where idx = " +
     req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -232,23 +233,7 @@ app.get("/more3", (req, res) => {
 });
 app.get("/more4", (req, res) => {
   const sql =
-    "SELECT title, author, comments, File FROM Books4 where idx = " +
-    req.query.idx;
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      return console.error(err.message);
-    }
-    // res.render("books", { model: rows });
-    const data = {
-      books: rows,
-    };
-    res.send(data);
-  });
-});
-
-app.get("/more5", (req, res) => {
-  const sql =
-    "SELECT title, author, comments, File FROM Books5 where idx = " +
+    "SELECT title, author, comments, File, Hash FROM Books4 where idx = " +
     req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -263,6 +248,7 @@ app.get("/more5", (req, res) => {
 });
 
 //Edit 업데이트 포스트
+
 app.post("/edit", (req, res) => {
   const data = req.body;
   const idx = data.idx;
@@ -270,8 +256,15 @@ app.post("/edit", (req, res) => {
   const Author = data.Author;
   const Comments = data.Comments;
   const File = data.File;
-  const query = `UPDATE books SET Title='${Title}', Author='${Author}',
-     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
+  const Hash = data.Hash;
+  let query = "";
+  if (data.Hash === "") {
+    query = `UPDATE books SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}' WHERE idx=${idx};`;
+  } else {
+    query = `UPDATE books SET Title='${Title}', Author='${Author}',
+    Comments='${Comments}', File='${File}',Hash='${Hash}' WHERE idx=${idx};`;
+  }
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
@@ -288,8 +281,15 @@ app.post("/edit2", (req, res) => {
   const Author = data.Author;
   const Comments = data.Comments;
   const File = data.File;
-  const query = `UPDATE books2 SET Title='${Title}', Author='${Author}',
-     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
+  const Hash = data.Hash;
+  let query = "";
+  if (data.Hash === "") {
+    query = `UPDATE books2 SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}' WHERE idx=${idx};`;
+  } else {
+    query = `UPDATE books2 SET Title='${Title}', Author='${Author}',
+    Comments='${Comments}', File='${File}',Hash='${Hash}' WHERE idx=${idx};`;
+  }
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
@@ -306,8 +306,15 @@ app.post("/edit3", (req, res) => {
   const Author = data.Author;
   const Comments = data.Comments;
   const File = data.File;
-  const query = `UPDATE books3 SET Title='${Title}', Author='${Author}',
-     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
+  const Hash = data.Hash;
+  let query = "";
+  if (data.Hash === "") {
+    query = `UPDATE books3 SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}' WHERE idx=${idx};`;
+  } else {
+    query = `UPDATE books3 SET Title='${Title}', Author='${Author}',
+    Comments='${Comments}', File='${File}',Hash='${Hash}' WHERE idx=${idx};`;
+  }
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
@@ -324,8 +331,15 @@ app.post("/edit4", (req, res) => {
   const Author = data.Author;
   const Comments = data.Comments;
   const File = data.File;
-  const query = `UPDATE books4 SET Title='${Title}', Author='${Author}',
-     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
+  const Hash = data.Hash;
+  let query = "";
+  if (data.Hash === "") {
+    query = `UPDATE books4 SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}' WHERE idx=${idx};`;
+  } else {
+    query = `UPDATE books4 SET Title='${Title}', Author='${Author}',
+    Comments='${Comments}', File='${File}',Hash='${Hash}' WHERE idx=${idx};`;
+  }
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
@@ -336,65 +350,63 @@ app.post("/edit4", (req, res) => {
 });
 
 //Create 생성 명령어 body 파싱
-
 app.post("/create", (req, res) => {
   const data = req.body;
-
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
+  // const File = data.hasOwnProperty("File") ? data.File : "";
+  // const Hash = data.hasOwnProperty("Hash") ? data.Hash : "";
   const File = data.File;
-  const query = `INSERT INTO Books (Title, Author, Comments, DateTime, File)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
-
+  const Hash = data.Hash;
+  const query = `INSERT INTO Books (Title, Author, Comments, DateTime, File, Hash)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });
-
 app.post("/create2", (req, res) => {
   const data = req.body;
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
-
+  // const File = data.hasOwnProperty("File") ? data.File : "";
+  // const Hash = data.hasOwnProperty("Hash") ? data.Hash : "";
   const File = data.File;
-  const query = `INSERT INTO Books2 (Title, Author, Comments, DateTime, File)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
-
+  const Hash = data.Hash;
+  const query = `INSERT INTO Books2 (Title, Author, Comments, DateTime, File, Hash)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });
-
 app.post("/create3", (req, res) => {
   const data = req.body;
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
+  // const File = data.hasOwnProperty("File") ? data.File : "";
+  // const Hash = data.hasOwnProperty("Hash") ? data.Hash : "";
   const File = data.File;
-  const query = `INSERT INTO Books3 (Title, Author, Comments, DateTime, File)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
-
+  const Hash = data.Hash;
+  const query = `INSERT INTO Books3 (Title, Author, Comments, DateTime, File, Hash)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });
@@ -404,18 +416,18 @@ app.post("/create4", (req, res) => {
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
-
+  // const File = data.hasOwnProperty("File") ? data.File : "";
+  // const Hash = data.hasOwnProperty("Hash") ? data.Hash : "";
   const File = data.File;
-  const query = `INSERT INTO Books4 (Title, Author, Comments, DateTime, File)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
-
+  const Hash = data.Hash;
+  const query = `INSERT INTO Books4 (Title, Author, Comments, DateTime, File, Hash)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
-
       return console.error(err.message);
     }
-
     res.send();
   });
 });
@@ -498,9 +510,9 @@ const upload = multer({
     destination: function (req, file, cb) {
       cb(null, `${__dirname}/uploads`);
     },
-    filename: function (req, file, cb) {
+    /* filename: function (req, file, cb) {
       cb(null, file.originalname);
-    },
+    }, */
   }),
 });
 
@@ -522,9 +534,13 @@ app.post("/create5", (req, res) => {
   const Title = data.Title;
   const Author = data.Author;
   const Comments = data.Comments;
+  // const File = data.hasOwnProperty("File") ? data.File : "";
+  // const Hash = data.hasOwnProperty("Hash") ? data.Hash : "";
   const File = data.File;
-  const query = `INSERT INTO Books5 (Title, Author, Comments, DateTime, File)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}');`;
+  const Hash = data.Hash;
+  const query = `INSERT INTO Books5 (Title, Author, Comments, DateTime, File, Hash)
+    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
@@ -541,13 +557,46 @@ app.post("/edit5", (req, res) => {
   const Author = data.Author;
   const Comments = data.Comments;
   const File = data.File;
-  const query = `UPDATE books5 SET Title='${Title}', Author='${Author}',
-     Comments='${Comments}', File='${File}' WHERE idx=${idx};`;
+  const Hash = data.Hash;
+  let query = "";
+  if (data.Hash === "") {
+    query = `UPDATE books5 SET Title='${Title}', Author='${Author}',
+     Comments='${Comments}' WHERE idx=${idx};`;
+  } else {
+    query = `UPDATE books5 SET Title='${Title}', Author='${Author}',
+    Comments='${Comments}', File='${File}',Hash='${Hash}' WHERE idx=${idx};`;
+  }
   db.all(query, (err, rows) => {
     if (err) {
       res.send(err);
       return console.error(err.message);
     }
     res.send();
+  });
+});
+
+//해쉬값 테스트
+
+app.post("/upload3", upload.single("files"), function (req, res, next) {
+  res.send({
+    fileName: req.file.filename,
+  });
+  console.log(req.file);
+  console.log(req.file.filename);
+});
+
+app.get("/more5", (req, res) => {
+  const sql =
+    "SELECT title, author, comments, File, Hash FROM Books5 where idx = " +
+    req.query.idx;
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    // res.render("books", { model: rows });
+    const data = {
+      books: rows,
+    };
+    res.send(data);
   });
 });

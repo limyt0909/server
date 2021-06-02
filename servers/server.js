@@ -5,10 +5,9 @@ const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 80;
 app.use(cors());
 app.use(bodyParser.json());
-app.use("/api", (req, res) => res.json({ username: "yong taek" }));
 
 app.listen(port, () => {
   console.log(`express is running on ${port}`);
@@ -216,6 +215,7 @@ app.get("/more2", (req, res) => {
     res.send(data);
   });
 });
+
 app.get("/more3", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books3 where idx = " +
@@ -596,6 +596,21 @@ app.get("/more5", (req, res) => {
     // res.render("books", { model: rows });
     const data = {
       books: rows,
+    };
+    res.send(data);
+  });
+});
+
+// 뉴스 TOP4
+app.get("/Newstop4", (req, res) => {
+  const sql = "SELECT title, Datetime, author, comments FROM Books2 limit 4";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    // res.render("books", { model: rows });
+    const data = {
+      data: rows,
     };
     res.send(data);
   });

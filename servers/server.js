@@ -603,7 +603,8 @@ app.get("/more5", (req, res) => {
 
 // 뉴스 TOP4
 app.get("/Newstop4", (req, res) => {
-  const sql = "SELECT title, Datetime, author, comments FROM Books2 limit 6";
+  const sql =
+    "SELECT idx, title, Datetime, author, comments FROM Books2 limit 6";
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);

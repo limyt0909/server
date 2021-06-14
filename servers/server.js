@@ -360,7 +360,7 @@ app.post("/create", (req, res) => {
   const File = data.File;
   const Hash = data.Hash;
   const query = `INSERT INTO Books (Title, Author, Comments, DateTime, File, Hash)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  select max(idx)+1, '${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}' from Books;`;
   console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
@@ -370,6 +370,7 @@ app.post("/create", (req, res) => {
     res.send();
   });
 });
+
 app.post("/create2", (req, res) => {
   const data = req.body;
   const Title = data.Title;
@@ -379,8 +380,8 @@ app.post("/create2", (req, res) => {
   // const Hash = data.hasOwnProperty("Hash") ? data.Hash : "";
   const File = data.File;
   const Hash = data.Hash;
-  const query = `INSERT INTO Books2 (Title, Author, Comments, DateTime, File, Hash)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  const query = `INSERT INTO Books2 (idx, Title, Author, Comments, DateTime, File, Hash)
+    select max(idx)+1, '${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}' from Books2;`;
   console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
@@ -390,6 +391,7 @@ app.post("/create2", (req, res) => {
     res.send();
   });
 });
+
 app.post("/create3", (req, res) => {
   const data = req.body;
   const Title = data.Title;
@@ -400,7 +402,7 @@ app.post("/create3", (req, res) => {
   const File = data.File;
   const Hash = data.Hash;
   const query = `INSERT INTO Books3 (Title, Author, Comments, DateTime, File, Hash)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  select max(idx)+1, '${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}' from Books3;`;
   console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
@@ -421,7 +423,7 @@ app.post("/create4", (req, res) => {
   const File = data.File;
   const Hash = data.Hash;
   const query = `INSERT INTO Books4 (Title, Author, Comments, DateTime, File, Hash)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  select max(idx)+1, '${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}' from Books4;`;
   console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
@@ -539,7 +541,7 @@ app.post("/create5", (req, res) => {
   const File = data.File;
   const Hash = data.Hash;
   const query = `INSERT INTO Books5 (Title, Author, Comments, DateTime, File, Hash)
-    VALUES ('${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}');`;
+  select max(idx)+1, '${Title}', '${Author}', '${Comments}', date('now'), '${File}', '${Hash}' from Books5;`;
   console.log(data);
   db.all(query, (err, rows) => {
     if (err) {
@@ -604,7 +606,7 @@ app.get("/more5", (req, res) => {
 // 뉴스 TOP4
 app.get("/Newstop4", (req, res) => {
   const sql =
-    "SELECT idx, title, Datetime, author, comments FROM Books2 limit 6";
+    "SELECT idx, title, Datetime, author, comments FROM Books2 ORDER BY idx DESC limit 6";
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);

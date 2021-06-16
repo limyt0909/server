@@ -187,7 +187,8 @@ app.get("/books5", (req, res) => {
 app.get("/more", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books where idx = " +
-    req.query.idx;
+    req.query.idx +
+    " order by idx desc";
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -203,7 +204,8 @@ app.get("/more", (req, res) => {
 app.get("/more2", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books2 where idx = " +
-    req.query.idx;
+    req.query.idx +
+    " order by idx desc";
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -219,7 +221,8 @@ app.get("/more2", (req, res) => {
 app.get("/more3", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books3 where idx = " +
-    req.query.idx;
+    req.query.idx +
+    " order by idx desc";
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -234,7 +237,8 @@ app.get("/more3", (req, res) => {
 app.get("/more4", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books4 where idx = " +
-    req.query.idx;
+    req.query.idx +
+    " order by idx desc";
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);

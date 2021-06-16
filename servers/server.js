@@ -108,7 +108,7 @@ db.run(sql_create5, (err) => {
 //JSON형태로 books에 쏘기 Board1 게시판에서 사용
 
 app.get("/books", (req, res) => {
-  const sql = "SELECT * FROM Books";
+  const sql = "SELECT * FROM Books order by idx desc";
   var body = req.body;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -123,7 +123,7 @@ app.get("/books", (req, res) => {
 });
 
 app.get("/books2", (req, res) => {
-  const sql = "SELECT * FROM Books2";
+  const sql = "SELECT * FROM Books2 order by idx desc";
   var body = req.body;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -138,7 +138,7 @@ app.get("/books2", (req, res) => {
 });
 
 app.get("/books3", (req, res) => {
-  const sql = "SELECT * FROM Books3";
+  const sql = "SELECT * FROM Books3 order by idx desc";
   var body = req.body;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -153,7 +153,7 @@ app.get("/books3", (req, res) => {
 });
 
 app.get("/books4", (req, res) => {
-  const sql = "SELECT * FROM Books4";
+  const sql = "SELECT * FROM Books4 order by idx desc";
   var body = req.body;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -168,7 +168,7 @@ app.get("/books4", (req, res) => {
 });
 
 app.get("/books5", (req, res) => {
-  const sql = "SELECT * FROM Books5";
+  const sql = "SELECT * FROM Books5 order by idx desc";
   var body = req.body;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -187,8 +187,8 @@ app.get("/books5", (req, res) => {
 app.get("/more", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books where idx = " +
-    req.query.idx +
-    " order by idx desc";
+    req.query.idx;
+
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -204,8 +204,8 @@ app.get("/more", (req, res) => {
 app.get("/more2", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books2 where idx = " +
-    req.query.idx +
-    " order by idx desc";
+    req.query.idx;
+
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -221,8 +221,7 @@ app.get("/more2", (req, res) => {
 app.get("/more3", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books3 where idx = " +
-    req.query.idx +
-    " order by idx desc";
+    req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
@@ -237,8 +236,7 @@ app.get("/more3", (req, res) => {
 app.get("/more4", (req, res) => {
   const sql =
     "SELECT title, author, comments, File, Hash FROM Books4 where idx = " +
-    req.query.idx +
-    " order by idx desc";
+    req.query.idx;
   db.all(sql, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
